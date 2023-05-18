@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    uses: azurity/upromise/.github/workflows/c-cpp.yml@build
+    uses: azurity/upromise/.github/workflows/c-cpp.yml@master
   release:
     runs-on: ubuntu-latest
     permissions:
