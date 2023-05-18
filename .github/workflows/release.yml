@@ -9,6 +9,7 @@ jobs:
     uses: azurity/upromise/.github/workflows/c-cpp.yml@master
   release:
     runs-on: ubuntu-latest
+    needs: [build]
     permissions:
       contents: write
     steps:
