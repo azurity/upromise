@@ -1,0 +1,23 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Cache apt-install
+      uses: daaku/gh-action-apt-install@v4
+      with:
+        packages: catch2
+    - name: CMake Action
+      uses: threeal/cmake-action@v1.1.0
+      with:
+        args: -DWITH_TEST=ON
