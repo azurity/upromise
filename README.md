@@ -19,3 +19,7 @@ A javescript-like promise library for C/C++.
 
 - [ ] generator function related helper functions
 - [ ] async/await related helper functions
+
+## known issues
+
+- Build to `Release` will cause SegmentFault, but this will nott happen if building to `RelWithDebInfo`.
