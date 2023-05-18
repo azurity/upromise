@@ -5,7 +5,7 @@
 
 # upromise
 
-A javescript-like promise library for C/C++.
+A javascript-like promise library for C/C++.
 
 ## features
 
