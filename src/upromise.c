@@ -91,7 +91,8 @@ upromise_promise_t *new_upromise_promise(upromise_dispatcher_t *dispatcher, upro
     ret->state = UPROMISE_PROMISE_STATE_PENDING;
     ret->data = NULL;
     init_upromise_task_queue(&ret->queue);
-    upromise_ref_count_inc(&ret->rc);
+    upromise_ref_count_inc(&ret->rc); // for return hold
+    upromise_ref_count_inc(&ret->rc); // for fn hold
     fn(ret, ctx);
     return ret;
 }

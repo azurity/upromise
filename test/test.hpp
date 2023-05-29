@@ -119,7 +119,7 @@ struct EventLoop
     }
 };
 
-std::function<void(std::function<void()> fn, std::chrono::duration<double> duration)> init_timeout(EventLoop *loop)
+inline std::function<void(std::function<void()> fn, std::chrono::duration<double> duration)> init_timeout(EventLoop *loop)
 {
     return [=](std::function<void()> fn, auto duration)
     {
@@ -230,7 +230,7 @@ auto inline null()
 namespace helper
 {
     static inline void *other = (void *)"other";
-    auto thenables(Adapter adapter, std::function<void(std::function<void()> fn, std::chrono::duration<double> duration)> setTimeout)
+    inline auto thenables(Adapter adapter, std::function<void(std::function<void()> fn, std::chrono::duration<double> duration)> setTimeout)
     {
         struct Thenables
         {

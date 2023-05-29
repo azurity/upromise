@@ -139,8 +139,6 @@ namespace upromise
         std::shared_ptr<Dispatcher> dispatcher;
         upromise_promise_t *promise;
 
-        Promise(upromise_promise_t *ptr) : promise(ptr) { promise->rc += 1; }
-
     public:
         using Resolvable = std::variant<void *, Promise, Thenable::Ptr>;
         using ResolveNotifyFn = std::function<void(Resolvable)>;
@@ -156,6 +154,12 @@ namespace upromise
         };
 
         Promise() : promise(nullptr) {}
+
+        Promise(const std::shared_ptr<Dispatcher> &dispatcher, upromise_promise_t *ptr)
+            : dispatcher(dispatcher), promise(ptr)
+        {
+            promise->rc += 1;
+        }
 
         struct BodyContext
         {
@@ -308,7 +312,7 @@ namespace upromise
                 new_promise = upromise_promise_then_common_thenable(promise, ctx, onFulfilled.index() != 0 ? &Promise::common_fulfilled : nullptr, &Promise::common_rejected_thenable);
             else if (onFulfilled.index() == 2 && onRejected.index() == 2)
                 new_promise = upromise_promise_then_thenable(promise, ctx, &Promise::common_fulfilled_thenable, &Promise::common_rejected_thenable);
-            return Promise(new_promise);
+            return Promise(dispatcher, new_promise);
         }
 
         struct Notifier
@@ -341,6 +345,7 @@ namespace upromise
             {
                 reject_upromise_promise(promise, err.err);
             }
+            del_upromise_promise(promise);
             delete ctx;
         }
 
@@ -419,7 +424,7 @@ namespace upromise
         }
     };
 
-    void Promise::ResolveNotifier::operator()(Resolvable data)
+    inline void Promise::ResolveNotifier::operator()(Resolvable data)
     {
         switch (data.index())
         {
