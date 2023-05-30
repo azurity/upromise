@@ -16,7 +16,7 @@ extern "C"
     typedef struct upromise_task_t
     {
         struct upromise_task_t *next;
-        int co;
+        intptr_t co;
         void *extra;
     } upromise_task_t;
 
@@ -27,6 +27,7 @@ extern "C"
     } upromise_task_queue_t;
 
     void upromise_task_queue_push(upromise_task_queue_t *queue, upromise_task_t *task);
+    void upromise_task_queue_push_immediately(upromise_task_queue_t *queue, upromise_task_t *task);
     upromise_task_t *upromise_task_queue_pop(upromise_task_queue_t *queue);
 
     // dispatcher
@@ -86,10 +87,9 @@ namespace upromise
 {
     class Dispatcher
     {
-        upromise_dispatcher_t *dispatcher;
-        friend class Promise;
-
     public:
+        upromise_dispatcher_t *dispatcher;
+
         Dispatcher() : dispatcher(nullptr) { dispatcher = new_upromise_dispatcher(); }
         ~Dispatcher()
         {
@@ -112,6 +112,11 @@ namespace upromise
             return *this;
         }
         void run() { upromise_dispatcher_run(dispatcher); }
+    };
+
+    struct Error
+    {
+        void *err;
     };
 
     class Promise;
@@ -148,18 +153,10 @@ namespace upromise
         using ThenableCallbackFn = std::function<Promise(void *)>;
         static inline CallbackFn null = nullptr;
 
-        struct Error
-        {
-            void *err;
-        };
-
         Promise() : promise(nullptr) {}
 
         Promise(const std::shared_ptr<Dispatcher> &dispatcher, upromise_promise_t *ptr)
-            : dispatcher(dispatcher), promise(ptr)
-        {
-            promise->rc += 1;
-        }
+            : dispatcher(dispatcher), promise(ptr) {}
 
         struct BodyContext
         {
@@ -205,6 +202,8 @@ namespace upromise
             dispatcher = std::move(p.dispatcher);
             return *this;
         }
+
+        upromise_promise_t *impl() { return promise; }
 
         Promise then(CallbackFn onFulfilled, CallbackFn onRejected = nullptr) const
         {

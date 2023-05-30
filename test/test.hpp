@@ -288,7 +288,7 @@ namespace helper
                                 [=](upromise::Thenable::ResolveNotifyFn onFulfilled, upromise::Thenable::NotifyFn)
                                 {
                                     onFulfilled(value);
-                                    throw upromise::Promise::Error{other};
+                                    throw upromise::Error{other};
                                 });
                         },
                     },
@@ -352,7 +352,7 @@ namespace helper
                             return std::make_shared<upromise::Thenable>(
                                 [=](upromise::Thenable::ResolveNotifyFn, upromise::Thenable::NotifyFn)
                                 {
-                                    throw upromise::Promise::Error{reason};
+                                    throw upromise::Error{reason};
                                 });
                         },
                     },

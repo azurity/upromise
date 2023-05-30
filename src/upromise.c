@@ -39,6 +39,14 @@ void upromise_task_queue_push(upromise_task_queue_t *queue, upromise_task_t *tas
     queue->tail = task;
 }
 
+void upromise_task_queue_push_immediately(upromise_task_queue_t *queue, upromise_task_t *task)
+{
+    task->next = queue->head->next;
+    if (task->next == NULL)
+        queue->tail = task;
+    queue->head->next = task;
+}
+
 upromise_task_t *upromise_task_queue_pop(upromise_task_queue_t *queue)
 {
     if (queue->head == queue->tail)

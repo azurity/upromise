@@ -4,7 +4,7 @@
 
 void *dummy = (void *)"dummy";
 
-TEST_CASE("2.1.2.1: When fulfilled, a promise: must not transition to any other state.", "[2.1.2]")
+TEST_CASE("2.1.2.1: When fulfilled, a promise: must not transition to any other state.", "[Promises/A+][2.1.2]")
 {
     PROLOGUE;
 
@@ -115,7 +115,7 @@ TEST_CASE("2.1.2.1: When fulfilled, a promise: must not transition to any other 
     EPILOGUE;
 }
 
-TEST_CASE("2.1.3.1: When rejected, a promise: must not transition to any other state.", "[2.1.3]")
+TEST_CASE("2.1.3.1: When rejected, a promise: must not transition to any other state.", "[Promises/A+][2.1.3]")
 {
     PROLOGUE;
 
@@ -226,14 +226,14 @@ TEST_CASE("2.1.3.1: When rejected, a promise: must not transition to any other s
     EPILOGUE;
 }
 
-TEST_CASE("2.2.1: Both `onFulfilled` and `onRejected` are optional arguments.", "[2.2.1]")
+TEST_CASE("2.2.1: Both `onFulfilled` and `onRejected` are optional arguments.", "[Promises/A+][2.2.1]")
 {
     // Typed language do not need type test.
 }
 
 void *sentinel = (void *)"sentinel";
 
-TEST_CASE("2.2.2: If `onFulfilled` is a function,", "[2.2.2]")
+TEST_CASE("2.2.2: If `onFulfilled` is a function,", "[Promises/A+][2.2.2]")
 {
     PROLOGUE;
 
@@ -461,7 +461,7 @@ TEST_CASE("2.2.2: If `onFulfilled` is a function,", "[2.2.2]")
     EPILOGUE;
 }
 
-TEST_CASE("2.2.3: If `onRejected` is a function,", "[2.2.3]")
+TEST_CASE("2.2.3: If `onRejected` is a function,", "[Promises/A+][2.2.3]")
 {
     PROLOGUE;
 
@@ -701,7 +701,7 @@ TEST_CASE("2.2.3: If `onRejected` is a function,", "[2.2.3]")
     EPILOGUE;
 }
 
-TEST_CASE("2.2.4: `onFulfilled` or `onRejected` must not be called until the execution context stack contains only platform code.", "[2.2.4]")
+TEST_CASE("2.2.4: `onFulfilled` or `onRejected` must not be called until the execution context stack contains only platform code.", "[Promises/A+][2.2.4]")
 {
     PROLOGUE;
 
@@ -956,7 +956,7 @@ TEST_CASE("2.2.4: `onFulfilled` or `onRejected` must not be called until the exe
     EPILOGUE;
 }
 
-TEST_CASE("2.2.5 `onFulfilled` and `onRejected` must be called as functions (i.e. with no `this` value).", "[2.2.5]")
+TEST_CASE("2.2.5 `onFulfilled` and `onRejected` must be called as functions (i.e. with no `this` value).", "[Promises/A+][2.2.5]")
 {
     // C++ do not have strict mode & sloppy mode
 }
@@ -977,7 +977,7 @@ auto callbackAggregator(int times, std::function<void()> ultimateCallback)
     };
 }
 
-TEST_CASE("2.2.6: `then` may be called multiple times on the same promise.", "[2.2.6]")
+TEST_CASE("2.2.6: `then` may be called multiple times on the same promise.", "[Promises/A+][2.2.6]")
 {
     PROLOGUE;
     using Callback = upromise::Promise::CallbackFn;
@@ -1017,7 +1017,7 @@ TEST_CASE("2.2.6: `then` may be called multiple times on the same promise.", "[2
         {
             testFulfilled(sentinel, promise, {
                 auto handler1 = sinon::stub().returns(other);
-                auto handler2 = sinon::stub().throws(upromise::Promise::Error{other});
+                auto handler2 = sinon::stub().throws(upromise::Error{other});
                 auto handler3 = sinon::stub().returns(other);
 
                 auto spy = sinon::spy<void *>();
@@ -1062,7 +1062,7 @@ TEST_CASE("2.2.6: `then` may be called multiple times on the same promise.", "[2
                 promise.then(
                            [=](void *) -> void *
                            {
-                               throw upromise::Promise::Error{sentinel2};
+                               throw upromise::Error{sentinel2};
                            })
                     .then(
                         null(),
@@ -1179,7 +1179,7 @@ TEST_CASE("2.2.6: `then` may be called multiple times on the same promise.", "[2
         {
             testRejected(sentinel, promise, {
                 auto handler1 = sinon::stub().returns(other);
-                auto handler2 = sinon::stub().throws(upromise::Promise::Error{other});
+                auto handler2 = sinon::stub().throws(upromise::Error{other});
                 auto handler3 = sinon::stub().returns(other);
 
                 auto spy = sinon::spy<void *>();
@@ -1227,7 +1227,7 @@ TEST_CASE("2.2.6: `then` may be called multiple times on the same promise.", "[2
                            null(),
                            [=](void *reason) -> void *
                            {
-                               throw upromise::Promise::Error{sentinel2};
+                               throw upromise::Error{sentinel2};
                            })
                     .then(
                         null(),
@@ -1315,7 +1315,7 @@ TEST_CASE("2.2.6: `then` may be called multiple times on the same promise.", "[2
     EPILOGUE;
 }
 
-TEST_CASE("2.2.7: `then` must return a promise: `promise2 = promise1.then(onFulfilled, onRejected)`", "[2.2.7]")
+TEST_CASE("2.2.7: `then` must return a promise: `promise2 = promise1.then(onFulfilled, onRejected)`", "[Promises/A+][2.2.7]")
 {
     PROLOGUE;
 
@@ -1341,7 +1341,7 @@ TEST_CASE("2.2.7: `then` must return a promise: `promise2 = promise1.then(onFulf
                 auto promise2 = promise1.then(
                     [=](void *) -> void *
                     {
-                        throw upromise::Promise::Error{expectedReason};
+                        throw upromise::Error{expectedReason};
                     });
 
                 promise2.then(
@@ -1358,7 +1358,7 @@ TEST_CASE("2.2.7: `then` must return a promise: `promise2 = promise1.then(onFulf
                     null(),
                     [=](void *) -> void *
                     {
-                        throw upromise::Promise::Error{expectedReason};
+                        throw upromise::Error{expectedReason};
                     });
 
                 promise2.then(
@@ -1417,7 +1417,7 @@ TEST_CASE("2.2.7: `then` must return a promise: `promise2 = promise1.then(onFulf
     EPILOGUE;
 }
 
-TEST_CASE("2.3.1: If `promise` and `x` refer to the same object, reject `promise` with a `TypeError' as the reason.", "[2.3.1]")
+TEST_CASE("2.3.1: If `promise` and `x` refer to the same object, reject `promise` with a `TypeError' as the reason.", "[Promises/A+][2.3.1]")
 {
     PROLOGUE;
 
@@ -1497,7 +1497,7 @@ TEST_CASE("2.3.1: If `promise` and `x` refer to the same object, reject `promise
         SPECIFY_END;                                     \
     }
 
-TEST_CASE("2.3.2: If `x` is a promise, adopt its state", "[2.3.2]")
+TEST_CASE("2.3.2: If `x` is a promise, adopt its state", "[Promises/A+][2.3.2]")
 {
     PROLOGUE;
 
@@ -1686,7 +1686,7 @@ TEST_CASE("2.3.2: If `x` is a promise, adopt its state", "[2.3.2]")
     });
 
 // `Thenable` is C++ only
-TEST_CASE("2.3.3: Otherwise, if `x` is an object or function,", "[2.3.3]")
+TEST_CASE("2.3.3: Otherwise, if `x` is an object or function,", "[Promises/A+][2.3.3]")
 {
     PROLOGUE;
     auto thenables = helper::thenables(adapter, setTimeout);
@@ -2376,7 +2376,7 @@ TEST_CASE("2.3.3: Otherwise, if `x` is an object or function,", "[2.3.3]")
                             [=](upromise::Thenable::ResolveNotifyFn resolvePromise, upromise::Thenable::NotifyFn)
                             {
                                 resolvePromise(sentinel);
-                                throw upromise::Promise::Error{other};
+                                throw upromise::Error{other};
                             });
                     };
 
@@ -2407,7 +2407,7 @@ TEST_CASE("2.3.3: Otherwise, if `x` is an object or function,", "[2.3.3]")
                             [=](upromise::Thenable::ResolveNotifyFn resolvePromise, upromise::Thenable::NotifyFn)
                             {
                                 resolvePromise(d.promise);
-                                throw upromise::Promise::Error{other};
+                                throw upromise::Error{other};
                             });
                     };
 
@@ -2438,7 +2438,7 @@ TEST_CASE("2.3.3: Otherwise, if `x` is an object or function,", "[2.3.3]")
                             [=](upromise::Thenable::ResolveNotifyFn resolvePromise, upromise::Thenable::NotifyFn)
                             {
                                 resolvePromise(d.promise);
-                                throw upromise::Promise::Error{other};
+                                throw upromise::Error{other};
                             });
                     };
 
@@ -2462,7 +2462,7 @@ TEST_CASE("2.3.3: Otherwise, if `x` is an object or function,", "[2.3.3]")
                             [=](upromise::Thenable::ResolveNotifyFn resolvePromise, upromise::Thenable::NotifyFn rejectPromise)
                             {
                                 rejectPromise(sentinel);
-                                throw upromise::Promise::Error{other};
+                                throw upromise::Error{other};
                             });
                     };
 
@@ -2487,7 +2487,7 @@ TEST_CASE("2.3.3: Otherwise, if `x` is an object or function,", "[2.3.3]")
                             {
                                 resolvePromise(sentinel);
                                 rejectPromise(other);
-                                throw upromise::Promise::Error{other};
+                                throw upromise::Error{other};
                             });
                     };
 
@@ -2511,7 +2511,7 @@ TEST_CASE("2.3.3: Otherwise, if `x` is an object or function,", "[2.3.3]")
                             {
                                 rejectPromise(sentinel);
                                 resolvePromise(other);
-                                throw upromise::Promise::Error{other};
+                                throw upromise::Error{other};
                             });
                     };
 
@@ -2537,7 +2537,7 @@ TEST_CASE("2.3.3: Otherwise, if `x` is an object or function,", "[2.3.3]")
                         return std::make_shared<upromise::Thenable>(
                             [=](upromise::Thenable::ResolveNotifyFn, upromise::Thenable::NotifyFn)
                             {
-                                throw upromise::Promise::Error{sentinel};
+                                throw upromise::Error{sentinel};
                             });
                     };
 
@@ -2566,7 +2566,7 @@ TEST_CASE("2.3.3: Otherwise, if `x` is an object or function,", "[2.3.3]")
                                         resolvePromise(other);
                                     },
                                     0ms);
-                                throw upromise::Promise::Error{sentinel};
+                                throw upromise::Error{sentinel};
                             });
                     };
 
@@ -2595,7 +2595,7 @@ TEST_CASE("2.3.3: Otherwise, if `x` is an object or function,", "[2.3.3]")
                                         rejectPromise(other);
                                     },
                                     0ms);
-                                throw upromise::Promise::Error{sentinel};
+                                throw upromise::Error{sentinel};
                             });
                     };
 
@@ -2622,7 +2622,7 @@ TEST_CASE("2.3.3: Otherwise, if `x` is an object or function,", "[2.3.3]")
     EPILOGUE;
 }
 
-TEST_CASE("2.3.4: If `x` is not an object or function, fulfill `promise` with `x`", "[2.3.4]")
+TEST_CASE("2.3.4: If `x` is not an object or function, fulfill `promise` with `x`", "[Promises/A+][2.3.4]")
 {
     // Typed language do not need type test.
 }

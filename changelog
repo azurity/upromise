@@ -1,4 +1,10 @@
-package (0.1.0) unstable; urgency=low
+upromise (0.2.0) unstable; urgency=low
+
+  * implementation of async/await, generator and async generator
+
+ -- azurity <784227594@qq.com>  Tue, 30 May 2023 21:42:25 +0800
+
+upromise (0.1.0) unstable; urgency=low
 
   * init version
 

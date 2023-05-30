@@ -14,11 +14,13 @@ A javascript-like promise library for C/C++.
 - Provide C++ binding in the same header file and provide `Thenable`
 - The C language part only uses the standard library and ucontext (using the functional encapsulation provided by the [corountine](https://github.com/cloudwu/coroutine) library)
 - Complete porting of [Promises/A+ tests](https://github.com/promises-aplus/promises-tests) to C++
+- Implementation of async/await similar to javascript
+- Implementation of generator similar to javascript
+- Implementation of async generator similar to javascript
 
 ## roadmap
 
-- [ ] generator function related helper functions
-- [ ] async/await related helper functions
+- [ ] better test-cases for async/await, generator and async-generator
 
 ## known issues
 

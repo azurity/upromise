@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(upromise VERSION 0.1.0)
+project(upromise VERSION 0.2.0)
 
 include(GNUInstallDirs)
 
@@ -21,7 +21,7 @@ enable_testing()
 option(WITH_TEST "build with test cases" OFF)
 set(WITH_TEST ON)
 
-add_library(upromise src/upromise.c src/coroutine.c)
+add_library(upromise src/upromise.c src/async.c src/coroutine.c)
 target_include_directories(upromise
     PUBLIC
     "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>"
@@ -32,13 +32,13 @@ if(WITH_TEST)
     find_package(Catch2 2 REQUIRED)
     find_package(Threads REQUIRED)
 
-    add_executable(upromise-test test/test.cpp)
+    add_executable(upromise-test test/test.cpp test/async-test.cpp)
     target_include_directories(upromise-test PRIVATE ${CMAKE_SOURCE_DIR}/include)
     target_link_libraries(upromise-test upromise Catch2::Catch2WithMain Threads::Threads)
 endif()
 
 include(Catch)
-catch_discover_tests(upromise-test)
+catch_discover_tests(upromise-test TEST_SPEC "[Promises/A+]")
 
 install(TARGETS upromise
         EXPORT upromiseTargets
